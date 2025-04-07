@@ -29,14 +29,26 @@ def query_rds_data():
         autocommit=True
     )
     with connection.cursor() as cursor:
-        q = """SELECT 
+        q = """WITH ranked_files AS (
+                SELECT 
+                    upload_time,
+                    type,
+                    size,
+                    ROW_NUMBER() OVER (PARTITION BY upload_time, type ORDER BY size DESC) AS rn
+                FROM 
+                    uploaded_files
+            )
+            SELECT 
                 upload_time,
                 type,
                 SUM(size) OVER (PARTITION BY type ORDER BY upload_time ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_size
             FROM 
-                uploaded_files
+                ranked_files
+            WHERE 
+                rn = 1
             ORDER BY 
                 upload_time, type;
+
         """
         cursor.execute(q)
         running_df = pd.DataFrame(cursor.fetchall(), columns=['Timestamp', 'File Type', 'Size'])
