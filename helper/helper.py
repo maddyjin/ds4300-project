@@ -15,6 +15,6 @@ def load_env_variables():
 def upload_to_s3(s3_client, file, bucket_name):
     try:
         s3_client.upload_fileobj(file, bucket_name, f"uploads/{file.name}")
-        return f'{file.name} uploaded successfully'
+        return f'{file.name} uploaded successfully!'
     except Exception as e:
         return f'an error occured while uploading {file.name}: {e}'

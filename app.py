@@ -32,7 +32,7 @@ uploads = st.file_uploader(
 
 # upload
 for file in uploads:
-    st.write("Processing", file.name)
+    st.write("Processing", str(file.name) + '...')
     e = upload_to_s3(s3_client, file, BUCKET_NAME)
     st.write(e)
 
