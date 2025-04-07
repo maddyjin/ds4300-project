@@ -39,12 +39,11 @@ with connection.cursor() as cursor:
             upload_time, type;
     """
     cursor.execute(q)
-    running = cursor.fetchall()
-    running.columns = ['Timestamp', 'File Type', 'Size']
-
+    running = pd.DataFrame(cursor.fetchall(), columns=['Timestamp', 'File Type', 'Size'])
+    
     cursor.execute(f"SELECT * FROM uploaded_files")
-    data = cursor.fetchall()
-    data.columns = ['idx', 'File Name', 'Size', 'File Type', 'Timestamp']
+    data = pd.DataFrame(cursor.fetchall(), 
+                        columns=['idx', 'File Name', 'Size', 'File Type', 'Timestamp'])
 
 tab1, tab2 = st.tabs(["S3 File Upload", "RDS Data Visualization"])
 with tab1: 
