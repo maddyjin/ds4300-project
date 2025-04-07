@@ -40,7 +40,7 @@ with connection.cursor() as cursor:
     """
     cursor.execute(q)
     running = pd.DataFrame(cursor.fetchall(), columns=['Timestamp', 'File Type', 'Size'])
-    
+
     cursor.execute(f"SELECT * FROM uploaded_files")
     data = pd.DataFrame(cursor.fetchall(), 
                         columns=['idx', 'File Name', 'Size', 'File Type', 'Timestamp'])
@@ -61,12 +61,13 @@ with tab1:
         st.write(e)
 
 with tab2: 
-    st.line_chart(running,
-                  x='Timestamp',
-                  y='Size',
-                  color='File Type')
-
     st.header("Data Visualization from RDS")
+    st.line_chart(running,
+                  x='Timestamp:',
+                  y='Size:Q',
+                  color='File Type:N')
+
+    
     st.dataframe(data)
 
     
