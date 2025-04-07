@@ -2,9 +2,15 @@ import streamlit as st
 from helper import upload_to_s3, get_iam_token
 import boto3
 import pymysql
+import os
+from dotenv import load_dotenv
 
 
 BUCKET_NAME = "ds4300-jamsters-project"
+
+load_dotenv()
+RDS_HOST = os.getenv("RDS_HOST")
+RDS_PASSWORD = os.getenv("RDS_PASSWORD")
 
 # initialize s3 client
 s3_client = boto3.client(
@@ -14,13 +20,11 @@ s3_client = boto3.client(
 
 
 # rds-induced chaos
-RDS_HOST = 'ds4300-jamsters-project-2.chm4484qs1an.us-east-2.rds.amazonaws.com'
-password = get_iam_token(RDS_HOST)
 connection = pymysql.connect(
             host=RDS_HOST,
             port=3306,
             user='admin',
-            password=password,
+            password=RDS_PASSWORD,
             autocommit=True
         )
 with connection.cursor() as cursor:
