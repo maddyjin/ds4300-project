@@ -63,7 +63,7 @@ with tab1:
 with tab2: 
     st.header("Data Visualization from RDS")
     st.line_chart(running,
-                  x='Timestamp:',
+                  x='Timestamp:T',
                   y='Size:Q',
                   color='File Type:N')
 
