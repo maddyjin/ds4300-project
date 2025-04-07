@@ -69,6 +69,7 @@ with tab2:
 
     
     st.dataframe(data)
+    st.dataframe(running)
 
     
 
