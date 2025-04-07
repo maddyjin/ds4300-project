@@ -4,7 +4,7 @@ import boto3
 import pymysql
 import os
 from dotenv import load_dotenv
-
+import pandas as pd
 
 BUCKET_NAME = "ds4300-jamsters-project"
 
@@ -29,8 +29,22 @@ connection = pymysql.connect(
             autocommit=True
         )
 with connection.cursor() as cursor:
+    q = """SELECT 
+            upload_time,
+            type,
+            SUM(size) OVER (PARTITION BY type ORDER BY upload_time ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_size
+        FROM 
+            uploaded_files
+        ORDER BY 
+            upload_time, type;
+    """
+    cursor.execute(q)
+    running = cursor.fetchall()
+    running.columns = ['Timestamp', 'File Type', 'Size']
+
     cursor.execute(f"SELECT * FROM uploaded_files")
     data = cursor.fetchall()
+    data.columns = ['idx', 'File Name', 'Size', 'File Type', 'Timestamp']
 
 tab1, tab2 = st.tabs(["S3 File Upload", "RDS Data Visualization"])
 with tab1: 
@@ -48,6 +62,11 @@ with tab1:
         st.write(e)
 
 with tab2: 
+    st.line_chart(running,
+                  x='Timestamp',
+                  y='Size',
+                  color='File Type')
+
     st.header("Data Visualization from RDS")
     st.dataframe(data)
 
