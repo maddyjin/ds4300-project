@@ -1,6 +1,3 @@
-# Example script to simulate a user uploading a JSON file every
-# 3 seconds to an S3 bucket.
-
 import os
 from dotenv import load_dotenv
 

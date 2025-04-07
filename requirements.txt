@@ -1,2 +1,6 @@
 streamlit
 boto3
+python-dotenv
+pandas
+numpy
+mysql-connector-python
