@@ -2,7 +2,7 @@ import streamlit as st
 from helper import load_env_variables, upload_to_s3
 import boto3
 
-BUCKET_NAME = "da4300-jamsters-project"
+BUCKET_NAME = "ds4300-jamsters-project"
 
 # # load aws credentials
 # aws_credentials = load_env_variables()
