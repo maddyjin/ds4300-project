@@ -25,10 +25,11 @@ connection = pymysql.connect(
             port=3306,
             user='admin',
             password=RDS_PASSWORD,
+            database='file_data',
             autocommit=True
         )
 with connection.cursor() as cursor:
-    cursor.execute(f"SELECT * FROM file_uploads")
+    cursor.execute(f"SELECT * FROM uploaded_files")
     data = cursor.fetchall()
 
 tab1, tab2 = st.tabs(["S3 File Upload", "RDS Data Visualization"])
