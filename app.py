@@ -15,7 +15,7 @@ s3_client = boto3.client(
 
 # rds-induced chaos
 RDS_HOST = 'ds4300-jamsters-project-2.chm4484qs1an.us-east-2.rds.amazonaws.com'
-password = get_iam_token()
+password = get_iam_token(RDS_HOST)
 connection = pymysql.connect(
             host=RDS_HOST,
             port=3306,
