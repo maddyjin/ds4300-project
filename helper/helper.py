@@ -1,5 +1,7 @@
 import os
 from dotenv import load_dotenv
+import boto3
+from botocore.config import Config
 
 # Load the values from .env into dictionary
 def load_env_variables():
@@ -18,3 +20,13 @@ def upload_to_s3(s3_client, file, bucket_name):
         return f'{file.name} uploaded successfully!'
     except Exception as e:
         return f'an error occured while uploading {file.name}: {e}'
+    
+def get_iam_token(RDS_HOST, RDS_PORT=3306, DB_USER='admin'):
+    """Generate IAM authentication token"""
+    client = boto3.client('rds', config=Config(region_name='us-east-2'))
+    token = client.generate_db_auth_token(
+        DBHostname=RDS_HOST,
+        Port=RDS_PORT,
+        DBUsername=DB_USER
+    )
+    return token
