@@ -40,6 +40,7 @@ with connection.cursor() as cursor:
     """
     cursor.execute(q)
     running = pd.DataFrame(cursor.fetchall(), columns=['Timestamp', 'File Type', 'Size'])
+    running['Size'] = running['Size'].astype(int)
 
     cursor.execute(f"SELECT * FROM uploaded_files")
     data = pd.DataFrame(cursor.fetchall(), 
