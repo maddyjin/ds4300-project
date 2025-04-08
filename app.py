@@ -118,7 +118,16 @@ with tab2:
         st.line_chart(running,
                       x='Timestamp',
                       y='Size',
-                      color='File Type')
+                      color='File Type',
+                      x_label='Time',
+                      y_label='Total Uploaded Bytes')
+        
+        st.bar_chart(running.groupby('File Type')['Size'].max().reset_index(),
+                     x='Size',
+                     y='File Type',
+                     x_label='Total Uploaded Bytes',
+                     color='File Type'
+                     )
     else:
         st.write("No data to display.")
 
