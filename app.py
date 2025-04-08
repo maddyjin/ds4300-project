@@ -5,6 +5,7 @@ import pymysql
 import os
 from dotenv import load_dotenv
 import pandas as pd
+from datetime import datetime
 
 BUCKET_NAME = "ds4300-jamsters-project"
 
@@ -54,6 +55,24 @@ def query_rds_data():
         running_df = pd.DataFrame(cursor.fetchall(), columns=['Timestamp', 'File Type', 'Size'])
         running_df['Size'] = running_df['Size'].astype(int)
 
+                # Get the most recent (largest) size for each file type
+        latest_sizes = running_df.groupby('File Type')['Size'].max().reset_index()
+
+        # Add new rows with current timestamp for each file type
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Current timestamp
+        new_rows = []
+        for _, row in latest_sizes.iterrows():
+            new_row = {
+                'Timestamp': now,
+                'File Type': row['File Type'],
+                'Size': row['Size']
+            }
+            new_rows.append(new_row)
+
+        # Convert new rows to DataFrame and append to the original running_df
+        new_rows_df = pd.DataFrame(new_rows)
+        running_df = pd.concat([running_df, new_rows_df], ignore_index=True)
+
         cursor.execute("SELECT * FROM uploaded_files")
         data_df = pd.DataFrame(cursor.fetchall(),
                                columns=['idx', 'File Name', 'Size', 'File Type', 'Timestamp'])
@@ -65,10 +84,9 @@ def query_rds_data():
 if 'refresh_data' not in st.session_state:
     st.session_state.refresh_data = True  # load once on start
 
-# Tabs
+st.title('Jamsters ETL Pipeline Dashboard')
 tab1, tab2, tab3 = st.tabs(["S3 File Upload", "RDS Data Visualization", "RDS Data Table"])
 
-# First tab: S3 uploads
 with tab1:
     st.header("Upload files to S3")
 
