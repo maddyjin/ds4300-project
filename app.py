@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime
+import altair as alt
 
 BUCKET_NAME = "ds4300-jamsters-project"
 
@@ -126,10 +127,20 @@ with tab2:
         st.bar_chart(running.groupby('File Type')['Size'].max().reset_index(),
                      y='Size',
                      x='File Type',
-                     y_label='Total Uploaded Bytes',
+                     x_label='Total Uploaded Bytes',
                      horizontal=True,
                      color='File Type'
                      )
+        st.write(alt.Chart(data).mark_bar().encode(
+                x=alt.X('Size:Q', title='Total Uploaded Bytes'),
+                y=alt.Y('File Type:N').sort('-x'),
+                color='File Type:N'
+            ).properties(
+                title='Total Uploaded Bytes by File Type'
+            )
+
+                 )
+
     else:
         st.write("No data to display.")
 
