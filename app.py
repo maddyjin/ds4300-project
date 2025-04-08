@@ -123,18 +123,11 @@ with tab2:
                       color='File Type',
                       x_label='Time',
                       y_label='Total Uploaded Bytes')
-        
-        st.bar_chart(running.groupby('File Type')['Size'].max().reset_index(),
-                     y='Size',
-                     x='File Type',
-                     x_label='Total Uploaded Bytes',
-                     horizontal=True,
-                     color='File Type'
-                     )
+
         st.write(alt.Chart(data).mark_bar().encode(
                 x=alt.X('Size:Q', title='Total Uploaded Bytes'),
                 y=alt.Y('File Type:N').sort('-x'),
-                color='File Type:N'
+                color=alt.Color('File Type:N', legend=None)
             ).properties(
                 title='Total Uploaded Bytes by File Type'
             )
