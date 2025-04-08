@@ -115,6 +115,7 @@ with tab2:
         st.session_state.refresh_data = True
 
     if not running.empty:
+        running['Timestamp'] = pd.to_datetime(running['Timestamp'], errors='ignore')
         st.line_chart(running,
                       x='Timestamp',
                       y='Size',
@@ -123,9 +124,10 @@ with tab2:
                       y_label='Total Uploaded Bytes')
         
         st.bar_chart(running.groupby('File Type')['Size'].max().reset_index(),
-                     x='Size',
-                     y='File Type',
-                     x_label='Total Uploaded Bytes',
+                     y='Size',
+                     x='File Type',
+                     y_label='Total Uploaded Bytes',
+                     horizontal=True,
                      color='File Type'
                      )
     else:
