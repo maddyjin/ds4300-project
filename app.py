@@ -118,12 +118,20 @@ with tab2:
 
     if not running.empty:
         running['Timestamp'] = pd.to_datetime(running['Timestamp'], errors='ignore')
-        st.line_chart(running,
-                      x='Timestamp',
-                      y='Size',
-                      color='File Type',
-                      x_label='Time',
-                      y_label='Total Uploaded Bytes')
+        st.write(alt.chart(running).mark_area().encode(
+            x=alt.X('Timestamp:T', title='Time'),
+            y=alt.Y('Size:Q', title='Total Uploaded Bytes'),
+            color=alt.Color('File Type:N')
+        ).properties(
+            title='Total Uploaded Bytes by File Type'
+        ).interactive())
+
+        # st.line_chart(running,
+        #               x='Timestamp',
+        #               y='Size',
+        #               color='File Type',
+        #               x_label='Time',
+        #               y_label='Total Uploaded Bytes')
 
         st.write(alt.Chart(data).mark_bar().encode(
                 x=alt.X('Size:Q', title='Total Uploaded Bytes'),
