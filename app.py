@@ -94,15 +94,14 @@ if 'refresh_data' not in st.session_state:
 st.title('Jamsters ETL Pipeline Dashboard')
 tab1, tab2, tab3 = st.tabs(["S3 File Upload", "RDS Data Visualization", "RDS Data Table"])
 
+loops = 0
 with tab1:
     st.header("Upload files to S3")
 
     uploads = st.file_uploader(
         "Choose files to upload:", accept_multiple_files=True
     )
-
-    print(len(uploads))
-
+    print(len(uploads), loops)
     for file in uploads:
         st.write("Processing", str(file.name) + '...')
         e = upload_to_s3(s3_client, file, BUCKET_NAME)
@@ -110,6 +109,7 @@ with tab1:
             st.success(f'{file.name} uploaded successfully!')
         else:
             st.error(f'an error occured while uploading {file.name}: {e}')
+    loops += 1
 
 if st.session_state.refresh_data:
     running, data = query_rds_data()
