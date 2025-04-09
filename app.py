@@ -109,6 +109,7 @@ with tab1:
             e = upload_to_s3(s3_client, file, BUCKET_NAME)
             if e == 0:
                 st.success(f'{file.name} uploaded successfully!')
+                print(file.name)
                 st.session_state.uploaded_files.add(file.name.split('_')[:-1])
             else:
                 st.error(f'an error occured while uploading {file.name}: {e}')
