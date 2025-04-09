@@ -97,7 +97,6 @@ if 'uploaded_files' not in st.session_state:
 st.title('Jamsters ETL Pipeline Dashboard')
 tab1, tab2, tab3 = st.tabs(["S3 File Upload", "RDS Data Visualization", "RDS Data Table"])
 
-loops = 0
 with tab1:
     st.header("Upload files to S3")
 
@@ -110,7 +109,7 @@ with tab1:
             e = upload_to_s3(s3_client, file, BUCKET_NAME)
             if e == 0:
                 st.success(f'{file.name} uploaded successfully!')
-                st.session_state.uploaded_files.add(file.name)
+                st.session_state.uploaded_files.add(file.name.split('_')[0])
             else:
                 st.error(f'an error occured while uploading {file.name}: {e}')
 
