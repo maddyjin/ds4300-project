@@ -16,8 +16,12 @@ def load_env_variables():
 
 
 def upload_to_s3(s3_client, file, bucket_name):
+    fn = file.name.split('.')
+    fn[0] = fn[0] + '_' + str(random.getrandbits(128))
+    file.name = '.'.join(fn)
+
     try:
-        s3_client.upload_fileobj(file, bucket_name, f"uploads/{file.name}_{str(random.getrandbits(64))}")
+        s3_client.upload_fileobj(file, bucket_name, f"uploads/{file.name}")
         return f'{file.name} uploaded successfully!'
     except Exception as e:
         return f'an error occured while uploading {file.name}: {e}'
