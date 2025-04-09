@@ -96,10 +96,16 @@ with tab1:
         "Choose files to upload:", accept_multiple_files=False
     )
 
-    for file in uploads:
-        st.write("Processing", str(file.name) + '...')
-        e = upload_to_s3(s3_client, file, BUCKET_NAME)
-        st.write(e)
+    # for file in uploads:
+    #     st.write("Processing", str(file.name) + '...')
+    #     e = upload_to_s3(s3_client, file, BUCKET_NAME)
+    #     st.write(e)
+
+    if uploads:
+        # Upload the file to S3
+        upload_result = upload_to_s3(s3_client, uploads, BUCKET_NAME)
+        st.success(upload_result)
+        st.session_state.refresh_data = True  # Set the flag to refresh data
 
 if st.session_state.refresh_data:
     running, data = query_rds_data()
