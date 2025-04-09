@@ -118,7 +118,7 @@ with tab2:
 
     if not running.empty:
         running['Timestamp'] = pd.to_datetime(running['Timestamp'], errors='ignore')
-        st.write(alt.chart(running).mark_area().encode(
+        st.write(alt.Chart(running).mark_area().encode(
             x=alt.X('Timestamp:T', title='Time'),
             y=alt.Y('Size:Q', title='Total Uploaded Bytes'),
             color=alt.Color('File Type:N')
