@@ -22,9 +22,9 @@ def upload_to_s3(s3_client, file, bucket_name):
 
     try:
         s3_client.upload_fileobj(file, bucket_name, f"uploads/{file.name}")
-        return f'{file.name} uploaded successfully!'
+        return 0
     except Exception as e:
-        return f'an error occured while uploading {file.name}: {e}'
+        return e
     
 def get_iam_token(RDS_HOST, RDS_PORT=3306, DB_USER='admin'):
     """Generate IAM authentication token"""

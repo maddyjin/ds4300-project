@@ -57,6 +57,11 @@ def query_rds_data():
         running_df = pd.DataFrame(cursor.fetchall(), columns=['Timestamp', 'File Type', 'Size'])
         running_df['Size'] = running_df['Size'].astype(int)
 
+        # every filetype listed should have row for every time listed
+        # if there's no new dat at that time, it should reflect the most recent update
+
+
+
                 # Get the most recent (largest) size for each file type
         latest_sizes = running_df.groupby('File Type')['Size'].max().reset_index()
 
@@ -99,7 +104,10 @@ with tab1:
     for file in uploads:
         st.write("Processing", str(file.name) + '...')
         e = upload_to_s3(s3_client, file, BUCKET_NAME)
-        st.write(e)
+        if e == 0:
+            st.success(f'{file.name} uploaded successfully!')
+        else:
+            st.error(f'an error occured while uploading {file.name}: {e}')
 
 if st.session_state.refresh_data:
     running, data = query_rds_data()
@@ -118,7 +126,7 @@ with tab2:
 
     if not running.empty:
         running['Timestamp'] = pd.to_datetime(running['Timestamp'], errors='ignore')
-        st.write(alt.Chart(running).mark_area().encode(
+        st.write(alt.Chart(running).mark_line().encode(
             x=alt.X('Timestamp:T', title='Time'),
             y=alt.Y('Size:Q', title='Total Uploaded Bytes'),
             color=alt.Color('File Type:N')
