@@ -109,9 +109,10 @@ with tab1:
             e = upload_to_s3(s3_client, file, BUCKET_NAME)
             if e == 0:
                 st.success(f'{file.name} uploaded successfully!')
-                st.session_state.uploaded_files.add(file.name.split('_')[0])
+                st.session_state.uploaded_files.add(file.name.split('_')[:-1])
             else:
                 st.error(f'an error occured while uploading {file.name}: {e}')
+    print(st.session_state.uploaded_files)
 
 if st.session_state.refresh_data:
     running, data = query_rds_data()
