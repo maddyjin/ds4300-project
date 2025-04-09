@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime
 import altair as alt
+import random
 
 BUCKET_NAME = "ds4300-jamsters-project"
 

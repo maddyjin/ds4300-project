@@ -46,4 +46,5 @@ logs/
 .coverage
 htmlcov/
 
-# Project specific
+# Project specific (to make Sasha's life easier)
+.ipynb

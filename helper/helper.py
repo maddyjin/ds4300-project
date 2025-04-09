@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import boto3
 from botocore.config import Config
+import random
 
 # Load the values from .env into dictionary
 def load_env_variables():
@@ -16,7 +17,7 @@ def load_env_variables():
 
 def upload_to_s3(s3_client, file, bucket_name):
     try:
-        s3_client.upload_fileobj(file, bucket_name, f"uploads/{file.name}")
+        s3_client.upload_fileobj(file, bucket_name, f"uploads/{file.name}_{str(random.getrandbits(64))}")
         return f'{file.name} uploaded successfully!'
     except Exception as e:
         return f'an error occured while uploading {file.name}: {e}'
