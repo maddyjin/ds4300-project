@@ -91,6 +91,9 @@ def query_rds_data():
 if 'refresh_data' not in st.session_state:
     st.session_state.refresh_data = True  # load once on start
 
+if 'uploaded_files' not in st.session_state:
+    st.session_state.uploaded_files = set()
+
 st.title('Jamsters ETL Pipeline Dashboard')
 tab1, tab2, tab3 = st.tabs(["S3 File Upload", "RDS Data Visualization", "RDS Data Table"])
 
