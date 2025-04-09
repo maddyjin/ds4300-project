@@ -101,6 +101,8 @@ with tab1:
         "Choose files to upload:", accept_multiple_files=True
     )
 
+    print(len(uploads))
+
     for file in uploads:
         st.write("Processing", str(file.name) + '...')
         e = upload_to_s3(s3_client, file, BUCKET_NAME)
