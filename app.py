@@ -101,15 +101,15 @@ with tab1:
     uploads = st.file_uploader(
         "Choose files to upload:", accept_multiple_files=True
     )
-    print(len(uploads), loops)
     for file in uploads:
         st.write("Processing", str(file.name) + '...')
-        e = upload_to_s3(s3_client, file, BUCKET_NAME)
-        if e == 0:
-            st.success(f'{file.name} uploaded successfully!')
-        else:
-            st.error(f'an error occured while uploading {file.name}: {e}')
-    loops += 1
+        if file.name not in st.session_state.uploaded_files:
+            e = upload_to_s3(s3_client, file, BUCKET_NAME)
+            if e == 0:
+                st.success(f'{file.name} uploaded successfully!')
+                st.session_state.uploaded_files.add(file.name)
+            else:
+                st.error(f'an error occured while uploading {file.name}: {e}')
 
 if st.session_state.refresh_data:
     running, data = query_rds_data()
