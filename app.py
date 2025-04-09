@@ -93,7 +93,7 @@ with tab1:
     st.header("Upload files to S3")
 
     uploads = st.file_uploader(
-        "Choose files to upload:", accept_multiple_files=True
+        "Choose files to upload:", accept_multiple_files=False
     )
 
     for file in uploads:
