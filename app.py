@@ -134,22 +134,23 @@ with tab2:
             title='Total Uploaded Bytes by File Type'
         ).interactive())
 
-        # st.line_chart(running,
-        #               x='Timestamp',
-        #               y='Size',
-        #               color='File Type',
-        #               x_label='Time',
-        #               y_label='Total Uploaded Bytes')
+        filecounts = data.count_values('File Type')
+        st.write(alt.Chart(filecounts).mark_bar().encode(
+            y=alt.Y('File Type:N', title='File Type'),
+            x=alt.X('count:Q', title='Number of Files'),
+            color=alt.Color('File Type:N', legend=None)
+        ).properties(
+            title='Number of Files by File Type'
+        ))
+        # st.write(alt.Chart(data).mark_bar().encode(
+        #         x=alt.X('Size:Q', title='Total Uploaded Bytes'),
+        #         y=alt.Y('File Type:N').sort('-x'),
+        #         color=alt.Color('File Type:N', legend=None)
+        #     ).properties(
+        #         title='Total Uploaded Bytes by File Type'
+        #     )
 
-        st.write(alt.Chart(data).mark_bar().encode(
-                x=alt.X('Size:Q', title='Total Uploaded Bytes'),
-                y=alt.Y('File Type:N').sort('-x'),
-                color=alt.Color('File Type:N', legend=None)
-            ).properties(
-                title='Total Uploaded Bytes by File Type'
-            )
-
-                 )
+                #  )
 
     else:
         st.write("No data to display.")
