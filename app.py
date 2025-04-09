@@ -110,8 +110,8 @@ with tab1:
             if e == 0:
                 st.success(f'{file.name} uploaded successfully!')
                 print(file.name, type(file.name))
-                file_type = file_name.split(".")[-1]
-                file_name = file_name.split(".")[0].split("_")[:-1][0]
+                file_type = file.name.split(".")[-1]
+                file_name = file.name.split(".")[0].split("_")[:-1][0]
                 st.session_state.uploaded_files.add(str(file_name+"."+file_type))
             else:
                 st.error(f'an error occured while uploading {file.name}: {e}')
