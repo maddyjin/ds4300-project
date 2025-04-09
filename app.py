@@ -134,7 +134,7 @@ with tab2:
             title='Total Uploaded Bytes by File Type'
         ).interactive())
 
-        filecounts = data.value_counts('File Type')
+        filecounts = data.value_counts('File Type').to_frame().reset_index()
         st.write(alt.Chart(filecounts).mark_bar().encode(
             y=alt.Y('File Type:N', title='File Type'),
             x=alt.X('count:Q', title='Number of Files'),
