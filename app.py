@@ -99,23 +99,23 @@ tab1, tab2, tab3 = st.tabs(["S3 File Upload", "RDS Data Visualization", "RDS Dat
 
 with tab1:
     st.header("Upload files to S3")
-
-    uploads = st.file_uploader(
-        "Choose files to upload:", accept_multiple_files=True
-    )
-    for file in uploads:
-        st.write("Processing", str(file.name) + '...')
-        if file.name not in st.session_state.uploaded_files:
-            e = upload_to_s3(s3_client, file, BUCKET_NAME)
-            if e == 0:
-                st.success(f'{file.name} uploaded successfully!')
-                print(file.name, type(file.name))
-                file_type = file.name.split(".")[-1]
-                file_name = file.name.split(".")[0].split("_")[:-1][0]
-                st.session_state.uploaded_files.add(str(file_name+"."+file_type))
-            else:
-                st.error(f'an error occured while uploading {file.name}: {e}')
-    print(st.session_state.uploaded_files)
+    with st.form("my-form", clear_on_submit=True):
+        uploads = st.file_uploader(
+            "Choose files to upload:", accept_multiple_files=True
+        )
+        for file in uploads:
+            st.write("Processing", str(file.name) + '...')
+            if file.name not in st.session_state.uploaded_files:
+                e = upload_to_s3(s3_client, file, BUCKET_NAME)
+                if e == 0:
+                    st.success(f'{file.name} uploaded successfully!')
+                    # print(file.name, type(file.name))
+                    # file_type = file.name.split(".")[-1]
+                    # file_name = file.name.split(".")[0].split("_")[:-1][0]
+                    # st.session_state.uploaded_files.add(str(file_name+"."+file_type))
+                else:
+                    st.error(f'an error occured while uploading {file.name}: {e}')
+        submitted = st.form_submit_button("submit")
 
 if st.session_state.refresh_data:
     running, data = query_rds_data()
