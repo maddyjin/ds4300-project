@@ -1,8 +1,11 @@
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 import streamlit as st
 from helper import upload_to_s3, get_iam_token
 import boto3
 import pymysql
-import os
 from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime
