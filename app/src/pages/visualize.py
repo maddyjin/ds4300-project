@@ -1,5 +1,5 @@
 import streamlit as st
-from helper import upload_to_s3, get_iam_token
+from app.helper import upload_to_s3, get_iam_token
 import boto3
 import pymysql
 import os
@@ -86,20 +86,46 @@ def query_rds_data():
 
     return running_df, data_df
 
-# Session state to trigger refresh
-if 'refresh_data' not in st.session_state:
-    st.session_state.refresh_data = True  # load once on start
+if st.session_state.refresh_data:
+    running, data = query_rds_data()
+    st.session_state.running = running
+    st.session_state.data = data
+    st.session_state.refresh_data = False  # Reset the flag after refreshing
+else:
+    running = st.session_state.get('running', pd.DataFrame())
+    data = st.session_state.get('data', pd.DataFrame())
 
-if 'uploaded_files' not in st.session_state:
-    st.session_state.uploaded_files = set()
-
-
-
-st.header("RDS Data Table")
-if st.button("🔄 Refresh Data", key="refresh_table_button"):
+st.header("Data Visualization from RDS")
+if st.button("🔄 Refresh Data", key="refresh_chart_button"):
     st.session_state.refresh_data = True
 
-if not data.empty:
-    st.dataframe(data)
+if not running.empty:
+    running['Timestamp'] = pd.to_datetime(running['Timestamp'], errors='ignore')
+    st.write(alt.Chart(running).mark_line().encode(
+        x=alt.X('Timestamp:T', title='Time'),
+        y=alt.Y('Size:Q', title='Total Uploaded Bytes'),
+        color=alt.Color('File Type:N')
+    ).properties(
+        title='Total Uploaded Bytes by File Type'
+    ).interactive())
+
+    filecounts = data.value_counts('File Type').to_frame().reset_index()
+    st.write(alt.Chart(filecounts).mark_bar().encode(
+        y=alt.Y('File Type:N', title='File Type'),
+        x=alt.X('count:Q', title='Number of Files'),
+        color=alt.Color('File Type:N', legend=None)
+    ).properties(
+        title='Number of Files by File Type'
+    ))
+    # st.write(alt.Chart(data).mark_bar().encode(
+    #         x=alt.X('Size:Q', title='Total Uploaded Bytes'),
+    #         y=alt.Y('File Type:N').sort('-x'),
+    #         color=alt.Color('File Type:N', legend=None)
+    #     ).properties(
+    #         title='Total Uploaded Bytes by File Type'
+    #     )
+
+            #  )
+
 else:
     st.write("No data to display.")
