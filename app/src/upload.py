@@ -3,7 +3,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 import streamlit as st
-from ...helper.helper import upload_to_s3, get_iam_token
+from ...helper import upload_to_s3, get_iam_token
 import boto3
 import pymysql
 from dotenv import load_dotenv
