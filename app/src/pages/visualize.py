@@ -1,5 +1,5 @@
 import streamlit as st
-from helper import upload_to_s3, get_iam_token
+from helper.helper import upload_to_s3, get_iam_token
 import boto3
 import pymysql
 import os
