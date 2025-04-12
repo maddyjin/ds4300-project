@@ -93,6 +93,14 @@ if 'refresh_data' not in st.session_state:
 if 'uploaded_files' not in st.session_state:
     st.session_state.uploaded_files = set()
 
+if st.session_state.refresh_data:
+    running, data = query_rds_data()
+    st.session_state.running = running
+    st.session_state.data = data
+    st.session_state.refresh_data = False  # Reset the flag after refreshing
+else:
+    running = st.session_state.get('running', pd.DataFrame())
+    data = st.session_state.get('data', pd.DataFrame())
 
 
 st.header("RDS Data Table")
