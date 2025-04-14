@@ -15,7 +15,7 @@ def SideBarLinks():
     """
     This function handles adding links to the sidebar of the app based upon the logged-in user's role, which was put in the streamlit session_state object when logging in.
     """
-
-    UploadNav()
-    DataNav()
-    VizNav()
+    with st.sidebar:
+        UploadNav()
+        DataNav()
+        VizNav()
