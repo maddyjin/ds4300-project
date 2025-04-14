@@ -101,7 +101,7 @@ if st.button("🔄 Refresh Data", key="refresh_chart_button"):
 
 if not running.empty:
     running['Timestamp'] = pd.to_datetime(running['Timestamp'], errors='ignore')
-    st.write(alt.Chart(running).mark_line().encode(
+    st.write(alt.Chart(running).mark_area().encode(
         x=alt.X('Timestamp:T', title='Time'),
         y=alt.Y('Size:Q', title='Total Uploaded Bytes'),
         color=alt.Color('File Type:N')
@@ -111,7 +111,7 @@ if not running.empty:
 
     filecounts = data.value_counts('File Type').to_frame().reset_index()
     st.write(alt.Chart(filecounts).mark_bar().encode(
-        y=alt.Y('File Type:N', title='File Type'),
+        y=alt.Y('File Type:N', title='File Type').sort('-x'),
         x=alt.X('count:Q', title='Number of Files'),
         color=alt.Color('File Type:N', legend=None)
     ).properties(
@@ -121,7 +121,7 @@ if not running.empty:
     sizes_by_type = data.groupby('File Type')['Size'].sum().reset_index()
     st.write(alt.Chart(sizes_by_type).mark_bar().encode(
         y=alt.Y('File Type:N', title='File Type'),
-        x=alt.X('Size:Q', title='Total Size (Bytes)'),
+        x=alt.X('Size:Q', title='Total Size (Bytes)').sort('-x'),
         color=alt.Color('File Type:N', legend=None)
     ).properties(
         title='Total Size by File Type'
