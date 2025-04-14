@@ -8,8 +8,10 @@ import pandas as pd
 from datetime import datetime
 import altair as alt
 import random
-from modules.nav import DataNav
+from modules.nav import UploadNav, DataNav, VizNav
+UploadNav()
 DataNav()
+VizNav()
 
 st.set_page_config(page_title="RDS Data Table")
 
