@@ -15,8 +15,6 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.set_page_config(page_title="S3 File Upload")
-
 BUCKET_NAME = "ds4300-jamsters-project"
 
 load_dotenv()

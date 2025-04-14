@@ -13,8 +13,6 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-st.set_page_config(page_title="RDS Data Visualization")
-
 BUCKET_NAME = "ds4300-jamsters-project"
 
 load_dotenv()
