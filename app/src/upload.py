@@ -11,6 +11,8 @@ import pandas as pd
 from datetime import datetime
 import altair as alt
 import random
+from modules.nav import UploadNav
+UploadNav()
 
 st.set_page_config(page_title="S3 File Upload")
 
