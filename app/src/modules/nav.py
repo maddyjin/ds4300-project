@@ -9,3 +9,13 @@ def DataNav():
 
 def VizNav():
     st.sidebar.page_link("pages/visualize.py", label="RDS Data Visualization", icon="📊")
+
+
+def SideBarLinks():
+    """
+    This function handles adding links to the sidebar of the app based upon the logged-in user's role, which was put in the streamlit session_state object when logging in.
+    """
+
+    UploadNav()
+    DataNav()
+    VizNav()

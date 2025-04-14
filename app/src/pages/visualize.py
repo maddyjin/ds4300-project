@@ -9,10 +9,9 @@ from datetime import datetime
 import altair as alt
 import random
 from itertools import product
-from modules.nav import UploadNav, DataNav, VizNav
-UploadNav()
-DataNav()
-VizNav()
+from modules.nav import SideBarLinks
+
+SideBarLinks()
 
 st.set_page_config(page_title="RDS Data Visualization")
 
