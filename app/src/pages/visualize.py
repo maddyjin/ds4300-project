@@ -117,6 +117,15 @@ if not running.empty:
     ).properties(
         title='Number of Files by File Type'
     ))
+
+    sizes_by_type = data.groupby('File Type')['Size'].sum().reset_index()
+    st.write(alt.Chart(sizes_by_type).mark_bar().encode(
+        y=alt.Y('File Type:N', title='File Type'),
+        x=alt.X('Size:Q', title='Total Size (Bytes)'),
+        color=alt.Color('File Type:N', legend=None)
+    ).properties(
+        title='Total Size by File Type'
+    ))
     # st.write(alt.Chart(data).mark_bar().encode(
     #         x=alt.X('Size:Q', title='Total Uploaded Bytes'),
     #         y=alt.Y('File Type:N').sort('-x'),
