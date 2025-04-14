@@ -8,6 +8,9 @@ import pandas as pd
 from datetime import datetime
 import altair as alt
 import random
+from itertools import product
+
+st.set_page_config(page_title="RDS Data Visualization")
 
 BUCKET_NAME = "ds4300-jamsters-project"
 
@@ -100,8 +103,20 @@ if st.button("🔄 Refresh Data", key="refresh_chart_button"):
     st.session_state.refresh_data = True
 
 if not running.empty:
+    totals = data.groupby(['File Type', 'Timestamp']).agg({'Size': 'sum'}).reset_index()
+    combs = pd.DataFrame(list(product(data['File Type'], data['Timestamp'])), 
+                     columns=['File Type', 'Timestamp'])
+    totals = totals.merge(combs, how = 'right').fillna(0).sort_values(['File Type', 'Timestamp', 'Size']).reset_index()
+
+    for i in range(len(totals)):
+        if i == 0:
+            pass
+        elif totals.loc[i, 'Size'] == 0:
+            if totals.loc[i, 'File Type'] ==  totals.loc[i-1, 'File Type']:
+                totals.loc[i, 'Size'] = totals.loc[i-1, 'Size']
+
     running['Timestamp'] = pd.to_datetime(running['Timestamp'], errors='ignore')
-    st.write(alt.Chart(running).mark_area().encode(
+    st.write(alt.Chart(running).mark_line().encode(
         x=alt.X('Timestamp:T', title='Time'),
         y=alt.Y('Size:Q', title='Total Uploaded Bytes'),
         color=alt.Color('File Type:N')
@@ -120,8 +135,8 @@ if not running.empty:
 
     sizes_by_type = data.groupby('File Type')['Size'].sum().reset_index()
     st.write(alt.Chart(sizes_by_type).mark_bar().encode(
-        y=alt.Y('File Type:N', title='File Type'),
-        x=alt.X('Size:Q', title='Total Size (Bytes)').sort('-x'),
+        y=alt.Y('File Type:N', title='File Type').sort('-x'),
+        x=alt.X('Size:Q', title='Total Size (Bytes)'),
         color=alt.Color('File Type:N', legend=None)
     ).properties(
         title='Total Size by File Type'
